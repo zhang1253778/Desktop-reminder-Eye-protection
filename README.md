@@ -67,7 +67,7 @@ start_desktop_reminder.bat
 
 该脚本会：
 
-- 启动提醒程序，并默认只保留通知区托盘图标（通常在任务栏右下角 `^` 隐藏图标区域）
+- 启动提醒程序，默认显示控制窗口；可通过 `--hide-control-window` 启动后隐藏到托盘
 - 在 `logs\` 目录创建日志文件（按时间戳命名）：`desktop_reminder_*.log`
 - 在项目目录写入运行 PID：`desktop_reminder.pid`
 - 防止重复启动：若已有实例运行，会直接唤醒现有控制窗口
@@ -81,7 +81,8 @@ start_desktop_reminder.bat
 - 默认生效时段：`9-12/13-18`
 - 弹窗大小：`320x140`
 - 窗口标题：`提醒`
-- 启动后控制窗口会隐藏，不显示任务栏按钮
+- 直接运行 `python .\desktop_reminder.py` 时控制窗口默认显示
+- 通过 `start_desktop_reminder.bat` 启动时，控制窗口默认显示；传 `--hide-control-window` 时隐藏到托盘
 - 托盘图标可在 `^` 隐藏图标区域找到，左键显示控制窗口，右键可退出
 - 点击控制窗口右上角 `X` 时，会让用户选择“退出程序”或“隐藏到托盘”
 - 勾选“本次运行记住我的选择”后，仅在当前运行周期内生效；重启程序后会再次询问
@@ -105,7 +106,8 @@ start_desktop_reminder.bat
 --active-hours       生效时段（如 9-12/13-18/19-21，默认 9-12/13-18）
 --log-retention-days 日志保留天数（默认 14，0 表示不按天清理）
 --log-max-files      日志最多保留文件数（默认 100，0 表示不按数量清理）
---show-control-window 启动时不隐藏任务栏图标，直接显示控制窗口（可选）
+--hide-control-window 启动时隐藏控制窗口，仅保留托盘图标（可选）
+--show-control-window 保留兼容参数：显式要求显示控制窗口（可选）
 ```
 
 说明：
@@ -139,7 +141,13 @@ python .\desktop_reminder.py --interval-minutes 0.5 --show-on-start
 .\start_desktop_reminder.bat --interval-minutes 0.5 --show-on-start
 ```
 
-如果需要显示控制窗口（并在任务栏可见）：
+如果需要启动后隐藏到托盘：
+
+```powershell
+.\start_desktop_reminder.bat --hide-control-window
+```
+
+如果你想显式指定显示控制窗口（兼容参数）：
 
 ```powershell
 .\start_desktop_reminder.bat --show-control-window
@@ -155,14 +163,23 @@ python .\desktop_reminder.py --interval-minutes 0.5 --show-on-start
 
 该脚本会输出：
 
-- `dist\DesktopReminder\DesktopReminder.exe`
+- `dist_YYYYMMDD_HHMMSS\DesktopReminder\DesktopReminder.exe`（默认 onedir）
+- `dist_YYYYMMDD_HHMMSS\DesktopReminder.exe`（使用 `--onefile`）
 
 说明：
 
 - 如果项目根目录存在 `tray_icon.ico`，打包脚本会自动作为 EXE 图标并内嵌资源
 - 若无 `tray_icon.ico`，程序会优先使用 EXE 内嵌图标（若可用）
 - 如需单文件可执行包，可执行：`.\build_exe.bat --onefile`
+- 如需生成“启动后隐藏到托盘”的 EXE，可追加：`--hide-control-window`
+- 不加 `--hide-control-window` 时，生成 EXE 启动后默认显示控制窗口
 - `--onefile` 模式在任务管理器中出现两个同名进程是 PyInstaller 引导机制的正常现象
+
+示例：
+
+```powershell
+.\build_exe.bat --onefile --hide-control-window
+```
 
 ## 开机自启（任务计划程序）
 

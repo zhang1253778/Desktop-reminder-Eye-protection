@@ -68,7 +68,7 @@ class DesktopReminderApp:
                     self._log("Skip startup reminder because current time is outside active hours.")
             self.schedule_next_reminder()
             if self.config.hide_taskbar_icon:
-                self.root.after(300, self._hide_from_taskbar)
+                self._hide_from_taskbar()
             self.root.mainloop()
         finally:
             self._remove_pid_file()
@@ -144,13 +144,13 @@ class DesktopReminderApp:
         )
         settings_button.grid(row=0, column=1, padx=8, sticky="ew")
 
-        exit_button = tk.Button(
+        hide_button = tk.Button(
             button_row,
-            text="退出程序",
+            text="隐藏窗口",
             width=12,
-            command=self.quit_app,
+            command=self._hide_from_taskbar,
         )
-        exit_button.grid(row=0, column=2, sticky="ew")
+        hide_button.grid(row=0, column=2, sticky="ew")
 
         hint_label = tk.Label(
             container,

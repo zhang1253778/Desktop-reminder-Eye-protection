@@ -204,7 +204,12 @@ def parse_args(argv: list[str]) -> AppConfig:
     parser.add_argument(
         "--show-control-window",
         action="store_true",
-        help="Keep the control window visible instead of hiding taskbar icon.",
+        help="Legacy compatibility flag: explicitly keep control window visible.",
+    )
+    parser.add_argument(
+        "--hide-control-window",
+        action="store_true",
+        help="Hide control window at startup and keep only tray icon visible.",
     )
 
     args = parser.parse_args(argv)
@@ -225,7 +230,7 @@ def parse_args(argv: list[str]) -> AppConfig:
         log_file=args.log_file,
         pid_file=args.pid_file,
         tray_icon_path=args.tray_icon,
-        hide_taskbar_icon=not args.show_control_window,
+        hide_taskbar_icon=args.hide_control_window and not args.show_control_window,
         log_retention_days=args.log_retention_days,
         log_max_files=args.log_max_files,
         active_hours_text=active_text,
