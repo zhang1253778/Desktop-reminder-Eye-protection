@@ -1,0 +1,39 @@
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Runtime files
+logs/
+*.log
+desktop_reminder.pid
+desktop_reminder_settings.json
+
+# Build artifacts
+build/
+dist/
+build_*/
+dist_*/
+spec_*/
+
+# Packaging metadata
+*.egg-info/
